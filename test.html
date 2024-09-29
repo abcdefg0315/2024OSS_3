@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student List</title>
+</head>
+
+<body>
+    <h1>Student Management</h1>
+
+    <!-- 버튼 정의 -->
+    <button id="btnStu">Get Students</button>
+    <button id="btnAdd">Add Student</button>
+
+    <!-- 결과를 보여줄 영역 -->
+    <div id="contents"></div>
+
+    <script>
+        window.onload = function () {
+            let btnStu = document.getElementById("btnStu");
+            let btnAdd = document.getElementById("btnAdd");
+
+            btnStu.addEventListener("click", getStudents);
+            btnAdd.addEventListener("click", postData);
+        }
+
+        function getStudents() {
+            let contents = document.getElementById("contents");
+            const xhr = new XMLHttpRequest();
+
+            // 서버에 GET 요청을 보냄
+            xhr.open("GET", "http://localhost:3000/students");
+            xhr.setRequestHeader("content-type", "application/json");
+            xhr.send();
+
+            // 요청이 완료되었을 때 실행되는 부분
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    const res = JSON.parse(xhr.response);
+                    contents.innerHTML = makeList(res);
+                } else {
+                    console.log(xhr.status, xhr.statusText);
+                }
+            }
+        }
+
+        function makeList(data) {
+            let str = "<ul>"; 
+                for (key in data) {
+                str += "<li> " + data[key].name + " (" + data[key].age + ")</li>";
+            }
+            str += "</ul>";
+            return str;
+        }
+
+        function postData() {
+            // 학생 추가 요청을 구현하는 함수 (추후 작성)
+            alert("This will be implemented later!");
+        }
+    </script>
+</body>
+
+</html>
